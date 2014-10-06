@@ -36,8 +36,52 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
     protected $_filters = array(
         'admin_items_form_tabs',
         'admin_navigation_main',
+        'api_extend_items',
+	'api_resources',
+    );
+public function filterApiResources($apiResources)
+{
+    // For the resource URI: /api/your_resources/[:id]
+    $apiResources['item_relations'] = array(
+        // Module associated with your resource.
+	//'module' => 'ItemRelationsPlugin',
+        // Controller associated with your resource.
+        // Type of record associated with your resource.
+        'record_type' => 'ItemRelationsRelation',
+        // List of actions available for your resource.
+        'actions' => array(
+            'index',  // GET request without ID
+            'get',    // GET request with ID
+            'post',   // POST request
+            'put',    // PUT request (ID is required)
+            'delete', // DELETE request (ID is required)
+        ),
+        // List of GET parameters available for your index action.
+        'index_params' => array('id', 'subject_id', 'object_id', 'propery_id'),
+    );
+    return $apiResources;
+}
+public function filterApiExtendItems($extend, $args)
+{
+    $item = $args['record'];
+    // For one resource:
+    $resourceId = array("id" => 21); //$this->_db->getTable('YourResource')->findByItemId($item->id);
+    $extend['your_resources'] = array(
+        'id' => 1,
+        'url' => Omeka_Record_Api_AbstractRecordAdapter::getResourceUrl("/item_relations/{$resourceId->id}"),
+        'resource' => 'your_resources',
     );
 
+    /* Or, for multiple resources:
+    $extend['your_resources'] = array(
+        'count' => 10,
+        'url' => Omeka_Record_Api_AbstractRecordAdapter::getResourceUrl("/your_resources?item={$item->id}"),
+        'resource' => 'your_resources',
+    );*/
+    echo var_dump($extend);
+    echo "<br>";
+    return $extend;
+}
     /**
      * @var array Options and their default values.
      */
@@ -236,11 +280,13 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
     public function hookDefineAcl($args)
     {
         $acl = $args['acl'];
-
+        //$relationsResource = new Zend_Acl_Resource('ItemRelations_Relations');
         $indexResource = new Zend_Acl_Resource('ItemRelations_Index');
         $vocabResource = new Zend_Acl_Resource('ItemRelations_Vocabularies');
         $acl->add($indexResource);
         $acl->add($vocabResource);
+	$acl->addResource('Relations');
+	$acl->allow(null, 'Relations');
     }
 
     /**
