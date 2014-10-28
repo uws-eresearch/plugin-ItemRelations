@@ -36,7 +36,6 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
     protected $_filters = array(
         'admin_items_form_tabs',
         'admin_navigation_main',
-        'api_extend_items',
 	'api_resources',
     );
 public function filterApiResources($apiResources)
@@ -57,30 +56,9 @@ public function filterApiResources($apiResources)
             'delete', // DELETE request (ID is required)
         ),
         // List of GET parameters available for your index action.
-        'index_params' => array('id', 'subject_id', 'object_id', 'propery_id'),
+        'index_params' => array('id', 'subject_item_id', 'object_item_id', 'property_id'),
     );
     return $apiResources;
-}
-public function filterApiExtendItems($extend, $args)
-{
-    $item = $args['record'];
-    // For one resource:
-    $resourceId = array("id" => 21); //$this->_db->getTable('YourResource')->findByItemId($item->id);
-    $extend['your_resources'] = array(
-        'id' => 1,
-        'url' => Omeka_Record_Api_AbstractRecordAdapter::getResourceUrl("/item_relations/{$resourceId->id}"),
-        'resource' => 'your_resources',
-    );
-
-    /* Or, for multiple resources:
-    $extend['your_resources'] = array(
-        'count' => 10,
-        'url' => Omeka_Record_Api_AbstractRecordAdapter::getResourceUrl("/your_resources?item={$item->id}"),
-        'resource' => 'your_resources',
-    );*/
-    echo var_dump($extend);
-    echo "<br>";
-    return $extend;
 }
     /**
      * @var array Options and their default values.
