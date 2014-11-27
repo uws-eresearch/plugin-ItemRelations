@@ -58,6 +58,8 @@ public function filterApiResources($apiResources)
         // List of GET parameters available for your index action.
         'index_params' => array('subject_item_id', 'object_item_id', 'property_id'),
     );
+
+    //Added GET only for looking up properties, TODO Post and Put
     $apiResources['item_relations_properties'] = array(
         // Module associated with your resource.
         //'module' => 'ItemRelationsPlugin',
