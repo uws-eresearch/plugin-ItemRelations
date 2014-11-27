@@ -26,5 +26,9 @@ class Api_ItemRelationsRelation extends Omeka_Record_Api_AbstractRecordAdapter
     public function setPutData(Omeka_Record_AbstractRecord $record, $data)
     {
         // Set properties directly to an existing record.
+
+        $record->subject_item_id = $data->subject_item_id;
+        $record->object_item_id = $data->object_item_id;
+        $record->property_id =  $data->property_id;
     }
 }
