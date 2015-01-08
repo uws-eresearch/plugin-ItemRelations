@@ -15,6 +15,7 @@ class ItemRelationsProperty extends Omeka_Record_AbstractRecord
      */
     public $id;
 
+
     /**
      * @var int
      */
