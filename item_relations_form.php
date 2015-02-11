@@ -38,7 +38,7 @@ echo __('Here you can relate this item to another item and delete existing '
     <tr class="item-relations-entry">
         <td><?php echo __('This Item'); ?></td>
         <td><?php echo get_view()->formSelect('item_relations_property_id[]', null, array('multiple' => false), $formSelectProperties); ?></td>
-        <td><?php echo __('Item ID'); ?> <?php echo get_view()->formText('item_relations_item_relation_object_item_id[]', null, array('size' => 8)); ?></td>
+        <td><?php echo __('Item ID'); ?> <?php echo get_view()->formHidden('item_relations_item_relation_object_item_id[]', null, array('size' => 8)); ?><?php echo get_view()->formText('item_relations_item_relation_object_item_search', null, array('size' => 8)); ?></td>
         <td><span style="color:#ccc;">n/a</span></td>
     </tr>
     </tbody>

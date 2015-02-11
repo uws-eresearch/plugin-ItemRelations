@@ -25,40 +25,7 @@ class ItemRelations_ItemAutocompleteController extends Omeka_Controller_Abstract
      */
     public function indexAction()
     {
-        
-        /*
-        $request = $this->getRequest();
-        $recordType = $request->getParam('api_record_type');
-        $resource = $request->getParam('api_resource');
-        $page = $request->getQuery('page', 1);
-        
-        $this->_validateRecordType($recordType);
-        
-        // Determine the results per page.
-        $perPageMax = (int) get_option('api_per_page');
-        $perPageUser = (int) $request->getQuery('per_page');
-        $perPage = ($perPageUser < $perPageMax && $perPageUser > 0) ? $perPageUser : $perPageMax;
-        
-        // Get the records and the result count.
-        $recordsTable = $this->_helper->db->getTable($recordType);
-        $totalResults = $recordsTable->count($_GET);
-        $records = $recordsTable->findBy($_GET, $perPage, $page);
-        
-        // Set the non-standard Omeka-Total-Results header.
-        $this->getResponse()->setHeader('Omeka-Total-Results', $totalResults);
-        
-        // Set the Link header for pagination.
-        $this->_setLinkHeader($perPage, $page, $totalResults, $resource);
-        
-        // Build the data array.
-        $data = array();
-        $recordAdapter = $this->_getRecordAdapter($recordType);
-        foreach ($records as $record) {
-            $data[] = $this->_getRepresentation($recordAdapter, $record, $resource);
-        }
-        
-        $this->_helper->jsonApi($data);
-        */
+
     }
     
         /**
@@ -71,14 +38,27 @@ class ItemRelations_ItemAutocompleteController extends Omeka_Controller_Abstract
         $resource = $request->getParam('api_resource');
         $apiParams = $request->getParam('api_params');
         
-        $db = $this->_helper->db->getTable('element_texts');
-        $select = $db->getSelect();
-        $select->distinct()->columns(array(
-            'record_id', 'text',
-        ))->where("(element_id=50 OR element_id=52) AND record_type='Item' AND TEXT LIKE ?", '%'. $apiParams[0]. '%');
-        
-        $data = $db->fetchAll($select);
-        
+        $db = $this->_helper->db->getTable("element_texts");
+/*
+SELECT DISTINCT et1.record_id, et1.text FROM omeka_element_texts et1 INNER JOIN omeka_element_texts et2 ON et1.record_id = et2.record_id WHERE et1.element_id=50 and et1.record_type="Item" and et2.record_type="Item" AND (et2.element_id = 50 or et2.element_id = 52) AND et2.text LIKE '%mullet%';
+*/
+        $full_table_name = $db->getTableName('element_texts');
+
+     //   $select = $db->getSelect();
+
+        $sql = "
+            SELECT DISTINCT et1.record_id, et1.text
+            FROM            {$full_table_name} et1
+            INNER JOIN      {$full_table_name} et2
+                ON et1.record_id = et2.record_id
+            WHERE           et1.element_id=50
+                AND         et1.record_type='Item'
+                AND         et2.record_type='Item'
+                AND         (et2.element_id = 50 or et2.element_id = 52)
+                AND         et2.text LIKE ?";
+
+        $data = $db->getTable('Element')->fetchObjects($sql, array('%'. $apiParams[0]. '%'));
+
       /*
         $record = $this->_helper->db->getTable('Item')->find($apiParams[0]);
         if (!$record) {
