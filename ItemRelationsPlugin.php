@@ -5,6 +5,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU GPLv3
  */
 
+require_once('controllers/ItemAutocompleteController.php');
+
 /**
  * Item Relations plugin.
  */
@@ -38,67 +40,89 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
         'admin_navigation_main',
 	'api_resources',
     );
-public function filterApiResources($apiResources)
-{
-    // For the resource URI: /api/your_resources/[:id]
-    $apiResources['item_relations'] = array(
-        // Module associated with your resource.
-	//'module' => 'ItemRelationsPlugin',
-        // Controller associated with your resource.
-        // Type of record associated with your resource.
-        'record_type' => 'ItemRelationsRelation',
-        // List of actions available for your resource.
-        'actions' => array(
-            'index',  // GET request without ID
-            'get',    // GET request with ID
-            'post',   // POST request
-            'put',    // PUT request (ID is required)
-            'delete', // DELETE request (ID is required)
-        ),
-        // List of GET parameters available for your index action.
-        'index_params' => array('subject_item_id', 'object_item_id', 'property_id'),
-    );
-    //Added GET only for looking up properties, TODO Post and Put
-    $apiResources['item_relations_vocabularies'] = array(
-        // Module associated with your resource.
-        //'module' => 'ItemRelationsPlugin',
-        // Controller associated with your resource.
-        // Type of record associated with your resource.
-        'record_type' => 'ItemRelationsVocabulary',
-        // List of actions available for your resource.
-        'actions' => array(
-            'index',  // GET request without ID 
-            'get',    // GET request with ID
-            //'post',   // POST request
-            //'put',    // PUT request (ID is required)
-            //'delete', // DELETE request (ID is required)
-        ), 
-        // List of GET parameters available for your index action.
-        'index_params' => array('label', 'id', 'name', 'namespace_uri', 'namespace_prefix'),
-    );
+    
+    public function filterApiResources($apiResources)
+    {
+        // For the resource URI: /api/your_resources/[:id]
+        $apiResources['item_relations'] = array(
+            // Module associated with your resource.
+            //'module' => 'ItemRelationsPlugin',
+            // Controller associated with your resource.
+            // Type of record associated with your resource.
+            'record_type' => 'ItemRelationsRelation',
+            // List of actions available for your resource.
+            'actions' => array(
+                'index',  // GET request without ID
+                'get',    // GET request with ID
+                'post',   // POST request
+                'put',    // PUT request (ID is required)
+                'delete', // DELETE request (ID is required)
+            ),
+            // List of GET parameters available for your index action.
+            'index_params' => array('subject_item_id', 'object_item_id', 'property_id'),
+        );
+        //Added GET only for looking up properties, TODO Post and Put
+        $apiResources['item_relations_vocabularies'] = array(
+            // Module associated with your resource.
+            //'module' => 'ItemRelationsPlugin',
+            // Controller associated with your resource.
+            // Type of record associated with your resource.
+            'record_type' => 'ItemRelationsVocabulary',
+            // List of actions available for your resource.
+            'actions' => array(
+                'index',  // GET request without ID 
+                'get',    // GET request with ID
+                //'post',   // POST request
+                //'put',    // PUT request (ID is required)
+                //'delete', // DELETE request (ID is required)
+            ), 
+            // List of GET parameters available for your index action.
+            'index_params' => array('label', 'id', 'name', 'namespace_uri', 'namespace_prefix'),
+        );
+    
+        //Added GET only for looking up properties, TODO Post and Put
+        $apiResources['item_relations_properties'] = array(
+            // Module associated with your resource.
+            //'module' => 'ItemRelationsPlugin',
+            // Controller associated with your resource.
+            // Type of record associated with your resource.
+            'record_type' => 'ItemRelationsProperty',
+            // List of actions available for your resource.
+            'actions' => array(
+                'index',  // GET request without ID
+                'get',    // GET request with ID
+                //'post',   // POST request
+                //'put',    // PUT request (ID is required)
+                //'delete', // DELETE request (ID is required)
+            ),
+            // List of GET parameters available for your index action.
+            'index_params' => array('label', 'id', 'vocabulary_id'),
+        );
+        
+        //Added GET only
+        $apiResources['item_autocomplete'] = array(
+            // Module associated with your resource.
+            // 'module' => 'ItemRelationsPlugin',
+            'module' => 'item-relations',
+            // Controller associated with your resource.
+            'controller' => 'item-autocomplete',
+            // Type of record associated with your resource.
+            // 'record_type' => 'Item',
+            // List of actions available for your resource.
+            'actions' => array(
+                // 'index',  // GET request without ID
+                'get',    // GET request with search term
+                //'post',   // POST request
+                //'put',    // PUT request (ID is required)
+                //'delete', // DELETE request (ID is required)
+            ),
+            // List of GET parameters available for your index action.
+            // 'index_params' => array('label', 'id', 'vocabulary_id'),
+        );
+    
+        return $apiResources;
+    }
 
-    //Added GET only for looking up properties, TODO Post and Put
-    $apiResources['item_relations_properties'] = array(
-        // Module associated with your resource.
-        //'module' => 'ItemRelationsPlugin',
-        // Controller associated with your resource.
-        // Type of record associated with your resource.
-        'record_type' => 'ItemRelationsProperty',
-        // List of actions available for your resource.
-        'actions' => array(
-            'index',  // GET request without ID
-            'get',    // GET request with ID
-            //'post',   // POST request
-            //'put',    // PUT request (ID is required)
-            //'delete', // DELETE request (ID is required)
-        ),
-        // List of GET parameters available for your index action.
-        'index_params' => array('label', 'id', 'vocabulary_id'),
-    );
-
-
-    return $apiResources;
-}
     /**
      * @var array Options and their default values.
      */
