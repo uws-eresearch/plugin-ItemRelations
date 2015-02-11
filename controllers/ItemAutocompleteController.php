@@ -59,18 +59,25 @@ SELECT DISTINCT et1.record_id, et1.text FROM omeka_element_texts et1 INNER JOIN 
 
         $data = $db->getTable('Element')->fetchObjects($sql, array('%'. $apiParams[0]. '%'));
 
-      /*
-        $record = $this->_helper->db->getTable('Item')->find($apiParams[0]);
-        if (!$record) {
-            throw new Omeka_Controller_Exception_Api('Invalid record. Record not found.', 404);
-        }
         
         // The user must have permission to show this record.
 //        $this->_validateUser($record, 'show');
+
+        $output = array();
+        foreach ($data as $datum)
+        {
+            $tmp_out = array();
+            $tmp_out['record_id'] = $datum['record_id'];
+            $tmp_out['text'] = $datum['text'];
+            $output[] = $tmp_out;
+        }
+        echo json_encode( $output );
+
+//        print_r($data);
         
-        $data = $this->_getRepresentation($this->_getRecordAdapter($recordType), $record, $resource);
-*/
-        $this->_helper->jsonApi($data);
+        
+
+//        $this->_helper->jsonApi($data);
 
     }
 }
