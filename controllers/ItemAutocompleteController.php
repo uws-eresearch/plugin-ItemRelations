@@ -4,11 +4,6 @@
  * 
  */
 
-/**
- * 
- * 
- * 
- */
 class ItemRelations_ItemAutocompleteController extends Omeka_Controller_AbstractActionController
 {
     /**
@@ -33,6 +28,7 @@ class ItemRelations_ItemAutocompleteController extends Omeka_Controller_Abstract
      */
     public function getAction()
     {
+   
         $request = $this->getRequest();
 //        $recordType = $request->getParam('api_record_type');
         $resource = $request->getParam('api_resource');
@@ -59,24 +55,21 @@ SELECT DISTINCT et1.record_id, et1.text FROM omeka_element_texts et1 INNER JOIN 
 
         $data = $db->getTable('Element')->fetchObjects($sql, array('%'. $apiParams[0]. '%'));
 
-        
-        // The user must have permission to show this record.
-//        $this->_validateUser($record, 'show');
-
         $output = array();
         foreach ($data as $datum)
         {
             $tmp_out = array();
-            $tmp_out['record_id'] = $datum['record_id'];
-            $tmp_out['text'] = $datum['text'];
+            $tmp_out['id'] = $datum['record_id'];
+            $tmp_out['label'] = $datum['text'];
             $output[] = $tmp_out;
         }
+        
+        if (!empty($_GET['callback']))
+            echo $_GET['callback']. '=';
+            
         echo json_encode( $output );
 
 //        print_r($data);
-        
-        
-
 //        $this->_helper->jsonApi($data);
 
     }
