@@ -100,7 +100,7 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
         );
         
         //Added GET only
-        $apiResources['item_autocomplete'] = array(
+        $apiResources['autocomplete_item'] = array(
             // Module associated with your resource.
             // 'module' => 'ItemRelationsPlugin',
             'module' => 'item-relations',

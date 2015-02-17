@@ -70,21 +70,20 @@ jQuery(document).ready(function () {
         inputs[1].id += jQuery('input[name=row_count_id]').val();
         inputs[2].id += jQuery('input[name=row_count_id]').val();
         
-        alert(inputs[1].id + ' / ' + inputs[2].id);
+//        alert(inputs[1].id + ' / ' + inputs[2].id);
         
         jQuery(function() {
             jQuery("#item_relations_item_relation_object_item_search" + rowid).autocomplete({
                minLength: 2,
                select: function( event, ui ) {
                   jQuery('input[id=item_relations_item_relation_object_item_id' + rowid + ']').val(ui.item.id);
-                  alert( ui.item ?
+/*                  alert( ui.item ?
                   "Selected: " + ui.item.id + " aka " + ui.item.label :
-                  "Nothing selected, input was " + this.value );
+                  "Nothing selected, input was " + this.value ); */
                },
                source: function(request, response) {
                     jQuery.ajax({
-        //                url: "http://208.79.89.189/api/item_autocomplete/" + request.term,
-                        url: "/api/item_autocomplete/" + request.term,
+                        url: "/api/autocomplete_item/" + request.term,
                         dataType: "json",
                         data: {
                             // q: request.term
@@ -105,14 +104,13 @@ jQuery(document).ready(function () {
            minLength: 2,
            select: function( event, ui ) {
               jQuery('input[id=item_relations_item_relation_object_item_id0]').val(ui.item.id);
-              alert( ui.item ?
+/*              alert( ui.item ?
               "Selected: " + ui.item.id + " aka " + ui.item.label :
-              "Nothing selected, input was " + this.value );
+              "Nothing selected, input was " + this.value ); */
            },
            source: function(request, response) {
                 jQuery.ajax({
-    //                url: "http://208.79.89.189/api/item_autocomplete/" + request.term,
-                    url: "/api/item_autocomplete/" + request.term,
+                    url: "/api/autocomplete_item/" + request.term,
                     dataType: "json",
                     data: {
                         // q: request.term
