@@ -64,9 +64,11 @@ jQuery(document).ready(function () {
         jQuery('input[name=row_count_id]').val( parseInt( jQuery('input[name=row_count_id]').val()) + 1 );
         
         var rowid = jQuery('input[name=row_count_id]').val()
+        inputs[0].id = inputs[0].id.replace(/[0-9]/g, '');
         inputs[1].id = inputs[1].id.replace(/[0-9]/g, '');
         inputs[2].id = inputs[2].id.replace(/[0-9]/g, '');
 
+        inputs[0].id += jQuery('input[name=row_count_id]').val();
         inputs[1].id += jQuery('input[name=row_count_id]').val();
         inputs[2].id += jQuery('input[name=row_count_id]').val();
         
@@ -83,7 +85,7 @@ jQuery(document).ready(function () {
                },
                source: function(request, response) {
                     jQuery.ajax({
-                        url: "/api/autocomplete_item/" + request.term,
+                        url: "/api/autocomplete_item/" + request.term + (jQuery('#item_relations_property_id' + rowid).val() == undefined ? '' : '/' + jQuery('#item_relations_property_id' + rowid).val()),
                         dataType: "json",
                         data: {
                             // q: request.term
@@ -110,7 +112,7 @@ jQuery(document).ready(function () {
            },
            source: function(request, response) {
                 jQuery.ajax({
-                    url: "/api/autocomplete_item/" + request.term,
+                    url: "/api/autocomplete_item/" + request.term + (jQuery('#item_relations_property_id').val() == undefined ? '' : '/' + jQuery('#item_relations_property_id').val()),
                     dataType: "json",
                     data: {
                         // q: request.term

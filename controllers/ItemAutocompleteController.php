@@ -71,21 +71,8 @@ SELECT DISTINCT et1.record_id, et1.text FROM omeka_element_texts et1 INNER JOIN 
                     AND         et2.record_type='Item'
                     AND         (et2.element_id = 50 or et2.element_id = 52)
                     AND         et2.text LIKE ?
-                    AND         it.id = 12";
-   /*         
-                SELECT DISTINCT et1.record_id, et1.text
-                FROM            {$fullname_element_texts} et1
-                INNER JOIN      {$fullname_element_texts} et2
-                    ON et1.record_id = et2.record_id
-                        INNER JOIN  {$fullname_item_types_elements} ite
-                            on et2.element_id = ite.element_id
-                WHERE           et1.element_id=50
-                    AND         et1.record_type='Item'
-                    AND         et2.record_type='Item'
-                    AND         (et2.element_id = 50 or et2.element_id = 52)
-                    AND         et2.text LIKE ?
-                    AND         ite.item_type_id = 12";
-//die($sql); */
+                    AND         it.id = 12";    //  12 = Person
+
             $data = $db->getTable('Element')->fetchObjects($sql, array('%'. $term . '%'));
         }
         else
