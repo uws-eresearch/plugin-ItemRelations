@@ -72,8 +72,6 @@ jQuery(document).ready(function () {
         inputs[1].id += jQuery('input[name=row_count_id]').val();
         inputs[2].id += jQuery('input[name=row_count_id]').val();
         
-//        alert(inputs[1].id + ' / ' + inputs[2].id);
-        
         jQuery(function() {
             jQuery("#item_relations_item_relation_object_item_search" + rowid).autocomplete({
                minLength: 2,
@@ -85,7 +83,7 @@ jQuery(document).ready(function () {
                },
                source: function(request, response) {
                     jQuery.ajax({
-                        url: "/api/autocomplete_item/" + request.term + (jQuery('#item_relations_property_id' + rowid).val() == undefined ? '' : '/' + jQuery('#item_relations_property_id' + rowid).val()),
+                        url: "/api/autocomplete_item/81hf938u1hjd83najne83h28d82h382h128fh82h/" + request.term + (jQuery('#item_relations_property_id' + rowid).val() == undefined ? '' : '/' + jQuery('#item_relations_property_id' + rowid).val()),
                         dataType: "json",
                         data: {
                             // q: request.term
@@ -112,7 +110,7 @@ jQuery(document).ready(function () {
            },
            source: function(request, response) {
                 jQuery.ajax({
-                    url: "/api/autocomplete_item/" + request.term + (jQuery('#item_relations_property_id').val() == undefined ? '' : '/' + jQuery('#item_relations_property_id').val()),
+                    url: "/api/autocomplete_item/81hf938u1hjd83najne83h28d82h382h128fh82h/" + request.term + (jQuery('#item_relations_property_id').val() == undefined ? '' : '/' + jQuery('#item_relations_property_id').val()),
                     dataType: "json",
                     data: {
                         // q: request.term

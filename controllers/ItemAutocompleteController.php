@@ -33,8 +33,15 @@ class ItemRelations_ItemAutocompleteController extends Omeka_Controller_Abstract
         $resource = $request->getParam('api_resource');
         $apiParams = $request->getParam('api_params');
         
-        $term = $apiParams[0];
-        $dcfieldid = empty($apiParams[1]) ? null : $apiParams[1];
+        $key = $apiParams[0];
+        $term = $apiParams[1];
+        $dcfieldid = empty($apiParams[1]) ? null : $apiParams[2];
+        
+        //  TODO: investigate another way to check user is logged in - current_user() doesn't work in API, only keys.  key mgmt a possible solution.  also possibly move this to a normal view instead of an API call
+        if ($key != '81hf938u1hjd83najne83h28d82h382h128fh82h')     
+        {
+            throw new Omeka_Controller_Exception_Api('Invalid key.', 403);
+        }
         
         $db = $this->_helper->db->getTable("element_texts");
 /*
