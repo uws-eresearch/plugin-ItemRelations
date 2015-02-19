@@ -29,18 +29,18 @@ class ItemRelations_ItemAutocompleteController extends Omeka_Controller_Abstract
     public function getAction()
     {
         $request = $this->getRequest();
-//        $recordType = $request->getParam('api_record_type');
-        $resource = $request->getParam('api_resource');
-        $apiParams = $request->getParam('api_params');
         
-        $key = $apiParams[0];
-        $term = $apiParams[1];
-        $dcfieldid = empty($apiParams[1]) ? null : $apiParams[2];
-        
-        //  TODO: investigate another way to check user is logged in - current_user() doesn't work in API, only keys.  key mgmt a possible solution.  also possibly move this to a normal view instead of an API call
-        if ($key != '81hf938u1hjd83najne83h28d82h382h128fh82h')     
+        // reserve access for logged-in users
+        if (! current_user())
         {
-            throw new Omeka_Controller_Exception_Api('Invalid key.', 403);
+            throw new Omeka_Controller_Exception_403();
+        }
+
+        $params = $request->getParams();
+        
+        if (empty($params['term']))
+        {
+            die('argh!  need a term');
         }
         
         $db = $this->_helper->db->getTable("element_texts");
@@ -62,7 +62,7 @@ SELECT DISTINCT et1.record_id, et1.text FROM omeka_element_texts et1 INNER JOIN 
      //   $select = $db->getSelect();
 
         // if DC field is a person, limit results to people...
-        if (in_array($dcfieldid, array(22, 24, 35)))    // contributor, creator, publisher
+        if (!empty($params['elementid']) && in_array($params['elementid'], array(22, 24, 35)))    // contributor, creator, publisher
         {
             $sql = "
                 SELECT DISTINCT et1.record_id, et1.text
@@ -80,7 +80,7 @@ SELECT DISTINCT et1.record_id, et1.text FROM omeka_element_texts et1 INNER JOIN 
                     AND         et2.text LIKE ?
                     AND         it.id = 12";    //  12 = Person
 
-            $data = $db->getTable('Element')->fetchObjects($sql, array('%'. $term . '%'));
+            $data = $db->getTable('Element')->fetchObjects($sql, array('%'. $params['term'] . '%'));
         }
         else
         {
@@ -95,7 +95,7 @@ SELECT DISTINCT et1.record_id, et1.text FROM omeka_element_texts et1 INNER JOIN 
                     AND         (et2.element_id = 50 or et2.element_id = 52)
                     AND         et2.text LIKE ?";
 
-            $data = $db->getTable('Element')->fetchObjects($sql, array('%'. $term . '%'));
+            $data = $db->getTable('Element')->fetchObjects($sql, array('%'. $params['term'] . '%'));
         }        
 
         $output = array();
@@ -107,9 +107,6 @@ SELECT DISTINCT et1.record_id, et1.text FROM omeka_element_texts et1 INNER JOIN 
             $output[] = $tmp_out;
         }
         
-        if (!empty($_GET['callback']))
-            echo $_GET['callback']. '=';
-            
         echo json_encode( $output );
 
 //        print_r($data);

@@ -98,7 +98,7 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
             // List of GET parameters available for your index action.
             'index_params' => array('label', 'id', 'vocabulary_id'),
         );
-        
+    /*    
         //Added GET only
         $apiResources['autocomplete_item'] = array(
             // Module associated with your resource.
@@ -119,7 +119,7 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
             // List of GET parameters available for your index action.
             // 'index_params' => array('label', 'id', 'vocabulary_id'),
         );
-    
+    */
         return $apiResources;
     }
 
