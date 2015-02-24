@@ -72,8 +72,8 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
             'actions' => array(
                 'index',  // GET request without ID 
                 'get',    // GET request with ID
-                //'post',   // POST request
-                //'put',    // PUT request (ID is required)
+                'post',   // POST request
+                'put',    // PUT request (ID is required)
                 //'delete', // DELETE request (ID is required)
             ), 
             // List of GET parameters available for your index action.
