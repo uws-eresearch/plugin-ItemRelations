@@ -12,9 +12,11 @@ So far these might work:
 /api/item\_relations/1 #Get ItemRelationsRelations with id = 1
 
 GET, POST  /api/item_relations_vocabularies
+
 GET, PUT, DELETE /api/item_relations_vocabularies/:id
 
 GET, POST  /api/item_relations_properties
+
 GET, PUT, DELETE /api/item_relations_properties/:id
 
 Autocomplete of item titles added to object in edit Item Relations admin page.  Previously required manual ID entry of the object.  It calls
