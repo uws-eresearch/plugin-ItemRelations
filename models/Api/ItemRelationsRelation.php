@@ -5,7 +5,7 @@ class Api_ItemRelationsRelation extends Omeka_Record_Api_AbstractRecordAdapter
 {
     // Get the REST representation of a record.
     public function getRepresentation(Omeka_Record_AbstractRecord $record)
-	    {   
+    {   
 	 return $record;
         // Return a PHP array, representing the passed record.
     }

@@ -8,7 +8,7 @@
 /**
  * Item Relations Property model.
  */
-class ItemRelationsProperty extends Omeka_Record_AbstractRecord
+class ItemRelationsProperty extends Omeka_Record_AbstractRecord implements Zend_Acl_Resource_Interface
 {
     /**
      * @var int
@@ -64,5 +64,17 @@ class ItemRelationsProperty extends Omeka_Record_AbstractRecord
         }
 
         return $text;
+    }
+    
+     /**
+     * Identify records as relating to their ACL resource.
+     *
+     * Required by Zend_Acl_Resource_Interface.
+     *
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return 'ItemRelations_Vocabularies';
     }
 }

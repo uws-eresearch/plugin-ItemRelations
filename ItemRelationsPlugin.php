@@ -7,6 +7,8 @@
 
 require_once('controllers/ItemAutocompleteController.php');
 
+require_once('models/Element.php');
+
 /**
  * Item Relations plugin.
  */
@@ -74,7 +76,7 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
                 'get',    // GET request with ID
                 'post',   // POST request
                 'put',    // PUT request (ID is required)
-                //'delete', // DELETE request (ID is required)
+                'delete', // DELETE request (ID is required)
             ), 
             // List of GET parameters available for your index action.
             'index_params' => array('label', 'id', 'name', 'namespace_uri', 'namespace_prefix'),
@@ -91,9 +93,9 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
             'actions' => array(
                 'index',  // GET request without ID
                 'get',    // GET request with ID
-                //'post',   // POST request
-                //'put',    // PUT request (ID is required)
-                //'delete', // DELETE request (ID is required)
+                'post',   // POST request
+                'put',    // PUT request (ID is required)
+                'delete', // DELETE request (ID is required)
             ),
             // List of GET parameters available for your index action.
             'index_params' => array('label', 'id', 'vocabulary_id'),

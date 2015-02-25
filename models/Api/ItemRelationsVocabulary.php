@@ -13,12 +13,8 @@ class Api_ItemRelationsVocabulary extends Omeka_Record_Api_AbstractRecordAdapter
     // Set data to a record during a POST request.
     public function setPostData(Omeka_Record_AbstractRecord $record, $data)
     {
-        print_r($data);
-    }
-
-    // Set data to a record during a PUT request.
-    public function setPutData(Omeka_Record_AbstractRecord $record, $data)
-    {
+//        print_r($data);
+        
         $record->name              = $data->name;
         $record->description       = $data->description;
         $record->namespace_prefix  = $data->namespace_prefix;
@@ -27,6 +23,12 @@ class Api_ItemRelationsVocabulary extends Omeka_Record_Api_AbstractRecordAdapter
         if (isset($data->custom)) {
             $record->custom = $data->custom;
         }
+    }
+
+    // Set data to a record during a PUT request.
+    public function setPutData(Omeka_Record_AbstractRecord $record, $data)
+    {
+        $this->setPostData($record, $data);
         
 //        print_r($data);
 //          {"id":5,"name":"Custom!","description":"Custom vocabulary containing relations defined for this Omeka instance.","namespace_prefix":"","namespace_uri":null,"custom":1}
