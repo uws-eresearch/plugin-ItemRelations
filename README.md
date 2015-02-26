@@ -10,3 +10,17 @@ So far these might work:
 /api/item\_relations #List all ItemRelationsRelations
 
 /api/item\_relations/1 #Get ItemRelationsRelations with id = 1
+
+GET, POST  /api/item_relations_vocabularies
+
+GET, PUT, DELETE /api/item_relations_vocabularies/:id
+
+GET, POST  /api/item_relations_properties
+
+GET, PUT, DELETE /api/item_relations_properties/:id
+
+Autocomplete of item titles added to object in edit Item Relations admin page.  Previously required manual ID entry of the object.  It calls
+
+GET /item-relations/item-autocomplete/get/term/:term/:element_id
+
+where :element_id is optional and limits the responses to item_type 12 (people) when set to 22, 24 or 35 (contributor, creator, publisher)
