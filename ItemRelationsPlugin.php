@@ -7,7 +7,6 @@
 
 require_once('controllers/ItemAutocompleteController.php');
 
-require_once('models/Element.php');
 
 /**
  * Item Relations plugin.
