@@ -18,6 +18,7 @@ class Api_ItemRelationsProperty extends Omeka_Record_Api_AbstractRecordAdapter
         {
             $record->vocabulary_id     = $data->vocabulary_id;
             $record->local_part        = $data->local_part;
+            $record->friendly_part     = $data->friendly_part;
             $record->label             = $data->label;
             $record->description       = $data->description;
         }

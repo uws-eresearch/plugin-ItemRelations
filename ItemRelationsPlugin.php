@@ -157,6 +157,7 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
             `vocabulary_id` int(10) unsigned NOT NULL,
             `local_part` varchar(100) NOT NULL,
+            `friendly_part` varchar(100) DEFAULT NULL,
             `label` varchar(100) DEFAULT NULL,
             `description` text,
             PRIMARY KEY (`id`)
@@ -190,6 +191,7 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
                 $property = new ItemRelationsProperty;
                 $property->vocabulary_id = $vocabularyId;
                 $property->local_part = $formalProperty['local_part'];
+                $property->friendly_part = $formalProperty['friendly_part'];
                 $property->label = $formalProperty['label'];
                 $property->description = $formalProperty['description'];
                 $property->save();
