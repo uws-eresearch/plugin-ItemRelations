@@ -72,9 +72,13 @@ class ItemRelations_VocabulariesController extends Omeka_Controller_AbstractActi
         }
         
         // Add new properties.
+        $newPropertyLocalParts = $this->_getParam('new_property_local_part');
+        $newPropertyFriendlyParts = $this->_getParam('new_property_friendly_part');
         $newPropertyLabels = $this->_getParam('new_property_label');
         $newPropertyDescriptions = $this->_getParam('new_property_description');
         foreach ($newPropertyLabels as $key => $newPropertyLabel) {
+            $newPropertyLocalPart = trim($newPropertyLocalParts[$key]);
+            $newPropertyFriendlyPart = trim($newPropertyFriendlyParts[$key]);
             $newPropertyLabel = trim($newPropertyLabel);
             $newPropertyDescription = trim($newPropertyDescriptions[$key]);
             
@@ -90,7 +94,8 @@ class ItemRelations_VocabulariesController extends Omeka_Controller_AbstractActi
             
             $newProperty = new ItemRelationsProperty;
             $newProperty->vocabulary_id = $vocabularyId;
-            $newProperty->local_part = ''; // cannot be NULL
+            $newProperty->local_part = $newPropertyLocalPart; // cannot be NULL
+            $newProperty->friendly_part = $newPropertyFriendlyPart; 
             $newProperty->label = $newPropertyLabel;
             $newProperty->description = $newPropertyDescription;
             $newProperty->save();

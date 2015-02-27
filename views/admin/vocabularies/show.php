@@ -28,7 +28,7 @@ $properties = $vocabulary->getProperties();
     <tbody>
 <?php foreach ($properties as $property): ?>
     <tr>
-        <td><?php echo $vocabulary->custom ? '<span style="color:#ccc;">n/a</span>' : $property->local_part; ?></td>
+        <td><?php echo $property->local_part; ?></td>
         <td><?php echo $property->label; ?></td>
         <td><?php echo $property->description; ?></td>
     </tr>
