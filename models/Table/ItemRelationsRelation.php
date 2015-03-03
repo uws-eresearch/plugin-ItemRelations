@@ -49,6 +49,7 @@ class Table_ItemRelationsRelation extends Omeka_Db_Table
         $db = $this->getDb();
         $select = $this->getSelect()
             ->where('item_relations_relations.subject_item_id = ?', (int) $subjectItemId);
+        $this->applySorting($select, 'property_id', 'DESC');
         return $this->fetchObjects($select);
     }
     
@@ -62,6 +63,7 @@ class Table_ItemRelationsRelation extends Omeka_Db_Table
         $db = $this->getDb();
         $select = $this->getSelect()
             ->where('item_relations_relations.object_item_id = ?', (int) $objectItemId);
+        $this->applySorting($select, 'property_id', 'DESC');
         return $this->fetchObjects($select);
     }
 }

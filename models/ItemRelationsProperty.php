@@ -76,6 +76,7 @@ class ItemRelationsProperty extends Omeka_Record_AbstractRecord implements Zend_
         return $text;
     }
     
+    
      /**
      * Identify records as relating to their ACL resource.
      *
