@@ -14,13 +14,13 @@ return $formalVocabularies = array(
         'properties' => array(
             array(
                 'local_part' => 'relation',
-                'friendly_part' => '',
+                'friendly_part' => 'Is Related To',
                 'label' => 'Relation',
                 'description' => 'A related resource.'
             ),
             array(
                 'local_part' => 'conformsTo',
-                'friendly_part' => '',
+		'friendly_part' => '',
                 'label' => 'Conforms To',
                 'description' => 'An established standard to which the described resource conforms.'
             ),
@@ -98,19 +98,19 @@ return $formalVocabularies = array(
             ),
             array(
                 'local_part' => 'source',
-                'friendly_part' => '',
+                'friendly_part' => 'Is Sourced From',
                 'label' => 'Source',
                 'description' => 'A related resource from which the described resource is derived.'
             ),
             array(
                 'local_part' => 'abstract',
-                'friendly_part' => '',
+                'friendly_part' => 'Has Abstract',
                 'label' => 'Abstract',
                 'description' => 'A summary of the resource.'
             ),
             array(
                 'local_part' => 'accessRights',
-                'friendly_part' => '',
+                'friendly_part' => 'Can Only Be Accessed By',
                 'label' => 'Access Rights',
                 'description' => 'Information about who can access the resource or an indication of its security status.'
             ),
@@ -134,25 +134,25 @@ return $formalVocabularies = array(
             ),
             array(
                 'local_part' => 'audience',
-                'friendly_part' => '',
+                'friendly_part' => 'Intended audience',
                 'label' => 'Audience',
                 'description' => 'A class of entity for whom the resource is intended or useful.'
             ),
             array(
                 'local_part' => 'contributor',
-                'friendly_part' => '',
+                'friendly_part' => 'Was Contributed To By',
                 'label' => 'Contributor',
                 'description' => 'An entity responsible for making contributions to the resource.'
             ),
             array(
                 'local_part' => 'coverage',
-                'friendly_part' => '',
+                'friendly_part' => 'Covers',
                 'label' => 'Coverage',
                 'description' => 'The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant.'
             ),
             array(
                 'local_part' => 'creator',
-                'friendly_part' => '',
+                'friendly_part' => 'Was Created By',
                 'label' => 'Creator',
                 'description' => 'An entity primarily responsible for making the resource.'
             ),
@@ -188,7 +188,7 @@ return $formalVocabularies = array(
             ),
             array(
                 'local_part' => 'language',
-                'friendly_part' => '',
+                'friendly_part' => 'Is In Language',
                 'label' => 'Language',
                 'description' => 'A language of the resource.'
             ),
@@ -200,7 +200,7 @@ return $formalVocabularies = array(
             ),
             array(
                 'local_part' => 'mediator',
-                'friendly_part' => '',
+                'friendly_part' => 'Access Is Mediated By',
                 'label' => 'Mediator',
                 'description' => 'An entity that mediates access to the resource and for whom the resource is intended or useful.'
             ),
@@ -212,13 +212,13 @@ return $formalVocabularies = array(
             ),
             array(
                 'local_part' => 'provenance',
-                'friendly_part' => '',
+                'friendly_part' => 'Has Provenance Information',
                 'label' => 'Provenance',
                 'description' => 'A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation.'
             ),
             array(
                 'local_part' => 'publisher',
-                'friendly_part' => '',
+                'friendly_part' => 'Is Published By',
                 'label' => 'Publisher',
                 'description' => 'An entity responsible for making the resource available.'
             ),
@@ -230,19 +230,19 @@ return $formalVocabularies = array(
             ),
             array(
                 'local_part' => 'rightsHolder',
-                'friendly_part' => '',
+                'friendly_part' => 'Rights Held By',
                 'label' => 'Rights Holder',
                 'description' => 'A person or organization owning or managing rights over the resource.'
             ),
             array(
                 'local_part' => 'spatial',
-                'friendly_part' => '',
+                'friendly_part' => 'Covers The Area',
                 'label' => 'Spatial Coverage',
                 'description' => 'Spatial characteristics of the resource.'
             ),
             array(
                 'local_part' => 'subject',
-                'friendly_part' => '',
+                'friendly_part' => 'References The Subject',
                 'label' => 'Subject',
                 'description' => 'The topic of the resource.'
             ),
@@ -254,13 +254,13 @@ return $formalVocabularies = array(
             ),
             array(
                 'local_part' => 'temporal',
-                'friendly_part' => '',
+                'friendly_part' => 'Covers The Timeframe',
                 'label' => 'Temporal Coverage',
                 'description' => 'Temporal characteristics of the resource.'
             ),
             array(
                 'local_part' => 'type',
-                'friendly_part' => '',
+                'friendly_part' => 'Is Of Type',
                 'label' => 'Type',
                 'description' => 'The nature or genre of the resource.'
             ),
