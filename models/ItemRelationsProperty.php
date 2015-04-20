@@ -31,10 +31,10 @@ class ItemRelationsProperty extends Omeka_Record_AbstractRecord implements Zend_
      * @var string
      */
     public $friendly_part;
-    
+
     /**
      * Human-readable name for the property.
-     * @var string 
+     * @var string
      */
     public $label;
 
@@ -66,7 +66,7 @@ class ItemRelationsProperty extends Omeka_Record_AbstractRecord implements Zend_
             && $this->friendly_part
         ) {
             $text = $this->friendly_part;
-            
+
         } else if ($hasLabel) {
             $text = $this->label;
         } else {
@@ -75,8 +75,8 @@ class ItemRelationsProperty extends Omeka_Record_AbstractRecord implements Zend_
 
         return $text;
     }
-    
-    
+
+
      /**
      * Identify records as relating to their ACL resource.
      *

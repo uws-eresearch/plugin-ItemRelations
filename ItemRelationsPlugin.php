@@ -41,7 +41,7 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
         'admin_navigation_main',
 	'api_resources',
     );
-    
+
     public function filterApiResources($apiResources)
     {
         // For the resource URI: /api/your_resources/[:id]
@@ -71,16 +71,16 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
             'record_type' => 'ItemRelationsVocabulary',
             // List of actions available for your resource.
             'actions' => array(
-                'index',  // GET request without ID 
+                'index',  // GET request without ID
                 'get',    // GET request with ID
                 'post',   // POST request
                 'put',    // PUT request (ID is required)
                 'delete', // DELETE request (ID is required)
-            ), 
+            ),
             // List of GET parameters available for your index action.
             'index_params' => array('label', 'id', 'name', 'namespace_uri', 'namespace_prefix'),
         );
-    
+
         //Added GET only for looking up properties, TODO Post and Put
         $apiResources['item_relations_properties'] = array(
             // Module associated with your resource.
@@ -99,7 +99,7 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
             // List of GET parameters available for your index action.
             'index_params' => array('label', 'id', 'vocabulary_id'),
         );
-    /*    
+    /*
         //Added GET only
         $apiResources['autocomplete_item'] = array(
             // Module associated with your resource.
@@ -371,7 +371,7 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
             'formSelectProperties' => get_table_options('ItemRelationsProperty'))
         );
     }
-    
+
     /**
      * Save the item relations after saving an item add/edit form.
      *
