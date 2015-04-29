@@ -94,8 +94,14 @@ jQuery(document).ready(function () {
                         }
                     })
                 }
-            });
-        });
+            }).keyup(function() {  // preserve plain numeric input if desired
+                var searchfield = jQuery("#item_relations_item_relation_object_item_search" + rowid);
+                if (searchfield.val() && !isNaN(searchfield.val())) {
+                    var id_value = searchfield.val();
+                    jQuery('input[id=item_relations_item_relation_object_item_id'+ rowid + ']').val(id_value);
+                }
+            })
+        })
     });
 });
 
@@ -120,6 +126,12 @@ jQuery(document).ready(function () {
                        response( data );
                     }
                 })
+            }
+        }).keyup(function() {  // preserve plain numeric input if desired
+            var searchfield = jQuery("#item_relations_item_relation_object_item_search0");
+            if (searchfield.val() && !isNaN(searchfield.val())) {
+                var id_value = searchfield.val();
+                jQuery('input[id=item_relations_item_relation_object_item_id0]').val(id_value);
             }
         });
     });
