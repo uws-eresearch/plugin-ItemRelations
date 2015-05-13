@@ -40,7 +40,7 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
     protected $_filters = array(
         'admin_items_form_tabs',
         'admin_navigation_main',
-	'api_resources',
+        'api_resources',
     );
 
     public function filterApiResources($apiResources)
@@ -307,7 +307,14 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
                 $db->query($sql);
             }
         }
-    }
+        
+/*        if ($oldVersion <= '2.1.0')
+        {
+            $sql = "SHOW COLUMNS FROM `{$db->ItemRelationsProperty}` LIKE 'friendly_part'";
+            $statement = $this->adapter->query($sql);
+            print_r($statement->execute());
+        }
+*/    }
 
    /**
      * Add the translations.
@@ -315,7 +322,28 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
     public function hookInitialize()
     {
         add_translation_source(dirname(__FILE__) . '/languages');
+        
+        $db = get_db();
+        $adapter = $db->getAdapter();
+        
+//        if (floatval($oldVersion) <= '2.1')
+        {
+            $sql = "SHOW COLUMNS FROM `{$db->ItemRelationsProperty}` LIKE 'friendly_part'";
+            $statement = $adapter->query($sql);
+
+            // do we already have a column in the db for friendly_part?
+            if (! $adapter->query($sql)->fetch())
+            {
+                // Nein!  add friendly parts to the db.
+                $this->populateFriendlyParts();
+            } /*
+            else
+            {
+                //  Jawohl!  do nothing.
+            } */
+        }
     }
+    
 
     /**
      * Define the ACL.
@@ -330,8 +358,8 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
         $vocabResource = new Zend_Acl_Resource('ItemRelations_Vocabularies');
         $acl->add($indexResource);
         $acl->add($vocabResource);
-	$acl->addResource('Relations');
-	$acl->allow(null, 'Relations');
+        $acl->addResource('Relations');
+        $acl->allow(null, 'Relations');
     }
 
     /**
@@ -638,4 +666,76 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
 
         return true;
     }
+    
+    public function populateFriendlyParts()
+    {
+        $db = get_db();
+        $adapter = $db->getAdapter();
+        
+        $sql = "ALTER TABLE `{$db->ItemRelationsProperty}` ADD friendly_part VARCHAR(100) AFTER local_part";
+        
+        $adapter->query($sql);
+
+        //  build a list of vocabs we have in the db
+        $vocabsResult = $db->getTable('ItemRelationsVocabulary')->findAll();
+        $dbVocabs = array();   // put the vocabs from the db into a handily-keyed format
+        foreach($vocabsResult as $row)
+        {
+            $dbVocabs[$row->namespace_prefix] = $row;
+        }
+        
+        //  get vocabs we have template for in PHP include
+        $templateFormalVocabularies = include 'formal_vocabularies.php';
+        
+        $templateVocabularyNamespacesPresent = array();  // hold a list of templated vocabs
+        foreach ($templateFormalVocabularies as $templateFormalVocabulary)
+        {
+            $templateVocabularyNamespacesPresent[] = $templateFormalVocabulary['namespace_prefix'];
+            
+            //  create vocab in db if not present
+            if (! in_array($templateFormalVocabulary['namespace_prefix'], array_keys($dbVocabs)))
+            {
+                $vocabulary = new ItemRelationsVocabulary;
+                $vocabulary->name = $templateFormalVocabulary['name'];
+                $vocabulary->description = $templateFormalVocabulary['description'];
+                $vocabulary->namespace_prefix = $templateFormalVocabulary['namespace_prefix'];
+                $vocabulary->namespace_uri = $templateFormalVocabulary['namespace_uri'];
+                $vocabulary->custom = 0;
+                $vocabulary->save();
+    
+                $vocabularyId = $vocabulary->id;
+            }
+        }
+        
+        //  should have all template vocabs in the db now, fetch them again    
+        $vocabsResult = $db->getTable('ItemRelationsVocabulary')->findAll();
+        foreach($templateFormalVocabularies as $templateVocab)
+        {
+            // does this db vocab exist in the template?  if not, skip it
+            if (empty($dbVocabs[$templateVocab['namespace_prefix']]))
+            {
+                continue;
+            }
+            
+            // get this db vocab's properties from the db
+            $propertiesResult = $db->getTable('ItemRelationsProperty')->findByVocabularyId($dbVocabs[$templateVocab['namespace_prefix']]['id']);
+            // put them into a handily-keyed array so we can compare them with the template ones
+            $dbVocabProperties = array();
+            foreach ($propertiesResult as $row)
+            {
+                $dbVocabProperties[$row['local_part']] = $row;
+            }
+
+            foreach ($templateVocab['properties'] as $templateVocabProperty)
+            {
+                if ($dbVocabProperties[$templateVocabProperty['local_part']]->friendly_part != $templateVocabProperty['friendly_part'])
+                {
+                    $property = $dbVocabProperties[$templateVocabProperty['local_part']];
+                    $property->friendly_part = $templateVocabProperty['friendly_part'];
+                    $property->save();
+                }
+            }
+        }
+    }
+
 }
