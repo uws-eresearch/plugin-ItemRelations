@@ -28,6 +28,7 @@ class Table_ItemRelationsRelation extends Omeka_Db_Table
                 array(
                     'property_vocabulary_id' => 'vocabulary_id',
                     'property_local_part' => 'local_part',
+                    'property_friendly_part' => 'friendly_part',
                     'property_label' => 'label',
                     'property_description' => 'description'
                 )
@@ -41,7 +42,7 @@ class Table_ItemRelationsRelation extends Omeka_Db_Table
 
     /**
      * Find item relations by subject item ID.
-     * 
+     *
      * @return array
      */
     public function findBySubjectItemId($subjectItemId)
@@ -51,10 +52,10 @@ class Table_ItemRelationsRelation extends Omeka_Db_Table
             ->where('item_relations_relations.subject_item_id = ?', (int) $subjectItemId)->order('property_id');
         return $this->fetchObjects($select);
     }
-    
+
     /**
      * Find item relations by object item ID.
-     * 
+     *
      * @return array
      */
     public function findByObjectItemId($objectItemId)

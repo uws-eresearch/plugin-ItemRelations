@@ -51,6 +51,7 @@ class ItemRelationsRelation extends Omeka_Record_AbstractRecord  implements Zend
     {
         $property = new ItemRelationsProperty;
         $property->local_part = $this->property_local_part;
+		$property->friendly_part = $this->property_friendly_part;
         $property->label = $this->property_label;
         $property->vocabulary_namespace_prefix = $this->vocabulary_namespace_prefix;
         return $property->getText();
