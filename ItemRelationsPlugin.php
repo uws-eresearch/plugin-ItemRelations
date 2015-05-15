@@ -363,8 +363,8 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
             $item = get_current_record('item');
 
             echo common('item-relations-show', array(
-                'subjectRelations' => self::prepareSubjectRelations($item),
-                'objectRelations' => self::prepareObjectRelations($item)
+                'subjectRelations' => self::prepareSubjectRelationsTree($item),
+                'objectRelations' => self::prepareObjectRelationsTree($item)
             ));
         }
     }
@@ -581,6 +581,33 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
         return $subjectRelations;
     }
 
+    public static function prepareSubjectRelationsTree(Item $item)
+    {
+        $subjects = get_db()->getTable('ItemRelationsRelation')->findBySubjectItemId($item->id);
+        $subjectRelationsTree = array();
+        
+        foreach ($subjects as $subject)
+        {
+            if (!($item = get_record_by_id('item', $subject->object_item_id))) {
+                continue;
+            }
+            
+            if (empty($subjectRelationsTree[$subject->getPropertyText()]))
+            {
+                $subjectRelationsTree[$subject->getPropertyText()] = array();
+            }
+            $subjectRelationsTree[$subject->getPropertyText()][] = array(
+                'item_relation_id' => $subject->id,
+                'object_item_id' => $subject->object_item_id,
+                'object_item_title' => self::getItemTitle($item),
+                'relation_text' => $subject->getPropertyText(),
+                'relation_description' => $subject->property_description
+            );
+        }
+        
+        return $subjectRelationsTree;
+    }
+    
     /**
      * Prepare object item relations for display.
      *
@@ -604,6 +631,33 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
             );
         }
         return $objectRelations;
+    }
+    
+    public static function prepareObjectRelationsTree(Item $item)
+    {
+        $objects = get_db()->getTable('ItemRelationsRelation')->findByObjectItemId($item->id);
+        $objectRelationsTree = array();
+
+        foreach ($objects as $object)
+        {
+            if (!($item = get_record_by_id('item', $object->subject_item_id))) {
+                continue;
+            }
+            
+            if (empty($objectRelationsTree[$object->getPropertyText()]))
+            {
+                $objectRelationsTree[$object->getPropertyText()] = array();
+            }
+
+            $objectRelationsTree[$object->getPropertyText()][] = array(
+                'item_relation_id' => $object->id,
+                'subject_item_id' => $object->subject_item_id,
+                'subject_item_title' => self::getItemTitle($item),
+                'relation_text' => $object->getPropertyText(),
+                'relation_description' => $object->property_description
+            );
+        }
+        return $objectRelationsTree;
     }
 
     /**

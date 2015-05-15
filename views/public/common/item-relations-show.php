@@ -4,17 +4,25 @@
     <p><?php echo __('This item has no relations.'); ?></p>
     <?php else: ?>
     <table>
-        <?php foreach ($subjectRelations as $subjectRelation): ?>
+        <?php foreach ($subjectRelations as $term => $subjectRelation): ?>
         <tr>
             <td><?php echo __('This Item'); ?></td>
-            <td><span title="<?php echo html_escape($subjectRelation['relation_description']); ?>"><?php echo $subjectRelation['relation_text']; ?></span></td>
-            <td>Item: <a href="<?php echo url('items/show/' . $subjectRelation['object_item_id']); ?>"><?php echo $subjectRelation['object_item_title']; ?></a></td>
+            <td valign='top'><span title="<?php echo html_escape($subjectRelation['relation_description']); ?>"><?php echo $term; ?></span></td>
+            <td>
+            <?php foreach ($subjectRelation as $relation): ?>
+                Item: <a href="<?php echo url('items/show/' . $relation['object_item_id']); ?>"><?php echo $relation['object_item_title']; ?></a><br>
+            <?php endforeach; ?>
+            </td>
         </tr>
         <?php endforeach; ?>
-        <?php foreach ($objectRelations as $objectRelation): ?>
+        <?php foreach ($objectRelations as $term => $objectRelation): ?>
         <tr>
-            <td>Item: <a href="<?php echo url('items/show/' . $objectRelation['subject_item_id']); ?>"><?php echo $objectRelation['subject_item_title']; ?></a></td>
-            <td><span title="<?php echo html_escape($objectRelation['relation_description']); ?>"><?php echo $objectRelation['relation_text']; ?></span></td>
+            <td>
+            <?php foreach ($objectRelation as $relation): ?>
+                Item: <a href="<?php echo url('items/show/' . $relation['subject_item_id']); ?>"><?php echo $relation['subject_item_title']; ?></a><br>
+            <?php endforeach; ?>
+            </td>
+            <td valign='top'><span title="<?php echo html_escape($objectRelation['relation_description']); ?>"><?php echo $objectRelation['relation_text']; ?><?php echo $term; ?></span></td>
             <td><?php echo __('This Item'); ?></td>
         </tr>
         <?php endforeach; ?>
