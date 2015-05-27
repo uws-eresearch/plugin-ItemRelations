@@ -39,9 +39,7 @@ EOB;
         <?php foreach ($objectRelations as $term => $objectRelation): ?>
         <tr>
             <td valign='top'>
-            <?php
-                foreach ($objectRelation as $relation): 
-            ?>
+            <?php $i = 0; foreach ($objectRelation as $relation): ?>
                 Item: <a href="<?php echo url('items/show/' . $relation['subject_item_id']); ?>"><?php echo $relation['subject_item_title']; ?></a><br>
             <?php
                     ++$i;
