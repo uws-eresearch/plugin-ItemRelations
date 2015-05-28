@@ -7,7 +7,7 @@
         <?php foreach ($subjectRelations as $term => $subjectRelation): ?>
         <tr>
             <td valign='top'><?php echo __('This Item'); ?></td>
-            <td valign='top'><span title="<?php echo html_escape($subjectRelation['relation_description']); ?>"><?php echo $term; ?></span></td>
+            <td valign='top'><span title="<?php if (isset($subjectRelation['relation_description'])) echo html_escape($subjectRelation['relation_description']); ?>"><?php echo $term; ?></span></td>
             <td valign='top'>
             <?php $i = 0; foreach ($subjectRelation as $relation): ?>
                 Item: <a href="<?php echo url('items/show/' . $relation['object_item_id']); ?>"><?php echo $relation['object_item_title']; ?></a><br>
@@ -63,7 +63,7 @@ EOB;
                 }
             ?>
             </td>
-            <td valign='top'><span title="<?php echo html_escape($objectRelation['relation_description']); ?>"><?php if (isset($objectRelation['relation_text'])) echo $objectRelation['relation_text']; ?><?php echo $term; ?></span></td>
+            <td valign='top'><span title="<?php if (isset($objectRelation['relation_description'])) echo html_escape($objectRelation['relation_description']); ?>"><?php if (isset($objectRelation['relation_text'])) echo $objectRelation['relation_text']; ?><?php echo $term; ?></span></td>
             <td valign='top'><?php echo __('This Item'); ?></td>
         </tr>
         <?php endforeach; ?>
