@@ -3,6 +3,7 @@
  * Item Relations
  * @copyright Copyright 2010-2014 Roy Rosenzweig Center for History and New Media
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU GPLv3
+ * Extended by eResearch at University of Technology, Sydney
  */
 
 
