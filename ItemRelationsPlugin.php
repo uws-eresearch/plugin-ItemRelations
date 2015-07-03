@@ -99,7 +99,7 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
                 'delete', // DELETE request (ID is required)
             ),
             // List of GET parameters available for your index action.
-            'index_params' => array('label', 'id', 'vocabulary_id'),
+            'index_params' => array('label', 'id', 'vocabulary_id', 'local_part'),
         );
     /*
         //Added GET only
