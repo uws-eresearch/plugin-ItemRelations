@@ -16,7 +16,7 @@ class Api_ItemRelationsRelation extends Omeka_Record_Api_AbstractRecordAdapter
 	//echo "data";
 	//echo var_dump($data);
 	//echo $data -> subject_item_id;
-        // Set properties directly to a new record.a
+        // Set properties directly to a new record.
         
 	$record->subject_item_id = $data->subject_item_id; 	
         $record->object_item_id = $data->object_item_id;

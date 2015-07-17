@@ -38,21 +38,19 @@ class ItemRelations_ItemAutocompleteController extends Omeka_Controller_Abstract
 
         $params = $request->getParams();
         
-        if (empty($params['term']))
+        if (empty($params['term']) || empty($params['elementid']))
         {
-            die('argh!  need a term');
+            header("HTTP/1.0 400 Bad Request");
+            die('Argh!  Need a search term and an element id');
         }
         
         $db = $this->_helper->db->getTable("element_texts");
-/*
-SELECT DISTINCT et1.record_id, et1.text FROM omeka_element_texts et1 INNER JOIN omeka_element_texts et2 ON et1.record_id = et2.record_id WHERE et1.element_id=50 and et1.record_type="Item" and et2.record_type="Item" AND (et2.element_id = 50 or et2.element_id = 52) AND et2.text LIKE '%mullet%';
-*/
+
 /*
         $bootstrap = Zend_Registry::get('bootstrap');
         $currentUser = $bootstrap->getResource('CurrentUser');
         $acl = $bootstrap->getResource('Acl');
 */
-        
        
         $fullname_element_texts = $db->getTableName('element_texts');
         $fullname_elements = $db->getTablePrefix(). 'elements';
@@ -60,9 +58,28 @@ SELECT DISTINCT et1.record_id, et1.text FROM omeka_element_texts et1 INNER JOIN 
         $fullname_item_types = $db->getTablePrefix(). 'item_types';
 
      //   $select = $db->getSelect();
+     
+        //  work out which DC element_ids to look up ppl instead of things
+        $sql = "
+            SELECT id FROM omeka_elements WHERE name IN ('contributor', 'creator', 'publisher') and element_set_id = 1;
+";
+        $people_element_ids = $db->getTable('Element')->fetchAll($sql);
+        
+        //  determine element_id for DC Title
+        $sql = "
+            SELECT id FROM omeka_elements WHERE name='Title' and element_set_id = 1;
+";
+        $title_id = $db->getTable('Element')->fetchOne($sql);
 
+        //  determine element_id for DC Alt Title
+        $sql = "
+            SELECT id FROM omeka_elements WHERE name='Alternative Title' and element_set_id = 1;
+";
+        $alt_title_id = $db->getTable('Element')->fetchOne($sql);
+
+       
         // if DC field is a person, limit results to people...
-        if (!empty($params['elementid']) && in_array($params['elementid'], array(22, 24, 35)))    // contributor, creator, publisher
+        if (!empty($params['elementid']) && in_array($params['elementid'], $people_element_ids[0]))    // contributor, creator, publisher
         {
             $sql = "
                 SELECT DISTINCT et1.record_id, et1.text
@@ -73,12 +90,12 @@ SELECT DISTINCT et1.record_id, et1.text FROM omeka_element_texts et1 INNER JOIN 
                             ON et2.record_id = i.id
                                     INNER JOIN	omeka_item_types it
                                         on i.item_type_id = it.id
-                WHERE           et1.element_id=50
+                WHERE           et1.element_id={$title_id}
                     AND         et1.record_type='Item'
                     AND         et2.record_type='Item'
-                    AND         (et2.element_id = 50 or et2.element_id = 52)
+                    AND         (et2.element_id IN ($title_id, $alt_title_id))
                     AND         et2.text LIKE ?
-                    AND         it.id = 12";    //  12 = Person
+                    AND         it.name = 'Person'";
 
             $data = $db->getTable('Element')->fetchObjects($sql, array('%'. $params['term'] . '%'));
         }
@@ -89,10 +106,10 @@ SELECT DISTINCT et1.record_id, et1.text FROM omeka_element_texts et1 INNER JOIN 
                 FROM            {$fullname_element_texts} et1
                 INNER JOIN      {$fullname_element_texts} et2
                     ON et1.record_id = et2.record_id
-                WHERE           et1.element_id=50
+                WHERE           et1.element_id={$title_id}
                     AND         et1.record_type='Item'
                     AND         et2.record_type='Item'
-                    AND         (et2.element_id = 50 or et2.element_id = 52)
+                    AND         (et2.element_id IN ($title_id, $alt_title_id))
                     AND         et2.text LIKE ?";
 
             $data = $db->getTable('Element')->fetchObjects($sql, array('%'. $params['term'] . '%'));
