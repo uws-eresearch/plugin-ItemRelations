@@ -83,7 +83,7 @@ jQuery(document).ready(function () {
                },
                source: function(request, response) {
                     jQuery.ajax({
-                        url: '/item-relations/item-autocomplete/get/term/' + request.term + (jQuery('#item_relations_property_id' + rowid).val() == undefined ? '' : '/elementid/' + jQuery('#item_relations_property_id' + rowid).val()),
+                        url: '/item-relations/item-autocomplete/get/term/' + request.term + (jQuery('#item_relations_property_id' + rowid).val() == undefined ? '' : '/irpropid/' + jQuery('#item_relations_property_id' + rowid).val()),
                         dataType: "json",
                         data: {
                             // q: request.term
@@ -116,7 +116,7 @@ jQuery(document).ready(function () {
            },
            source: function(request, response) {
                 jQuery.ajax({
-                   url: '/item-relations/item-autocomplete/get/term/' + request.term + (jQuery('#item_relations_property_id').val() == undefined ? '' : '/elementid/' + jQuery('#item_relations_property_id').val()),
+                   url: '/item-relations/item-autocomplete/get/term/' + request.term + (jQuery('#item_relations_property_id').val() == undefined ? '' : '/irpropid/' + jQuery('#item_relations_property_id').val()),
                     dataType: "json",
                     data: {
                         // q: request.term

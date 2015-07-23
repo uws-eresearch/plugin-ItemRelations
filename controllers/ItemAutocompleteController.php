@@ -38,7 +38,7 @@ class ItemRelations_ItemAutocompleteController extends Omeka_Controller_Abstract
 
         $params = $request->getParams();
         
-        if (empty($params['term']) || empty($params['elementid']))
+        if (empty($params['term']) || empty($params['irpropid']))
         {
             header("HTTP/1.0 400 Bad Request");
             die('Argh!  Need a search term and an element id');
@@ -59,11 +59,15 @@ class ItemRelations_ItemAutocompleteController extends Omeka_Controller_Abstract
 
      //   $select = $db->getSelect();
      
-        //  work out which DC element_ids to look up ppl instead of things
-        $sql = "
-            SELECT id FROM omeka_elements WHERE name IN ('contributor', 'creator', 'publisher') and element_set_id = 1;
-";
-        $people_element_ids = $db->getTable('Element')->fetchAll($sql);
+        //  work out which item_relations_property_ids to look up ppl instead of things
+        $irprop_people_ids = array();
+        $q_contributor_id = $db->getTable('ItemRelationsProperty')->findByLabel('Contributor');
+        $irprop_people_ids[] = $q_contributor_id[0]->id;
+        $q_creator_id = $db->getTable('ItemRelationsProperty')->findByLabel('Creator');
+        $irprop_people_ids[] = $q_creator_id[0]->id;
+        $q_publisher_id = $db->getTable('ItemRelationsProperty')->findByLabel('Publisher');
+        $irprop_people_ids[] = $q_publisher_id[0]->id;
+  
         
         //  determine element_id for DC Title
         $sql = "
@@ -77,9 +81,8 @@ class ItemRelations_ItemAutocompleteController extends Omeka_Controller_Abstract
 ";
         $alt_title_id = $db->getTable('Element')->fetchOne($sql);
 
-       
         // if DC field is a person, limit results to people...
-        if (!empty($params['elementid']) && in_array($params['elementid'], $people_element_ids[0]))    // contributor, creator, publisher
+        if (!empty($params['irpropid']) && in_array($params['irpropid'], $irprop_people_ids))    // contributor, creator, publisher
         {
             $sql = "
                 SELECT DISTINCT et1.record_id, et1.text
