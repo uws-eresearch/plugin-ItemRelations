@@ -36,14 +36,14 @@ class Table_ItemRelationsProperty extends Omeka_Db_Table
 
     /**
      * Find properties by vocabulary.
-     * 
+     *
      * @param int $id The vocabulary ID.
      * @return array
      */
     public function findByVocabularyId($id)
     {
         $select = $this->getSelect();
-        
+
         $select->where('vocabulary_id = ?', (int) $id)
                ->reset(Zend_Db_Select::ORDER)
                ->order('id');

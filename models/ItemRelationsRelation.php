@@ -30,7 +30,7 @@ class ItemRelationsRelation extends Omeka_Record_AbstractRecord  implements Zend
      */
     public $object_item_id;
    protected function _validate()
-    { 
+    {
         //echo "Validating";
 	if (empty($this->subject_item_id)) {
             $this->addError('subject_item_id', __('Relation requires subject item ID.'));
@@ -51,13 +51,14 @@ class ItemRelationsRelation extends Omeka_Record_AbstractRecord  implements Zend
     {
         $property = new ItemRelationsProperty;
         $property->local_part = $this->property_local_part;
+		$property->friendly_part = $this->property_friendly_part;
         $property->label = $this->property_label;
         $property->vocabulary_namespace_prefix = $this->vocabulary_namespace_prefix;
         return $property->getText();
     }
     /**
     /* Identify ItemRelationsRelation records as relating to the ItemRelationsRelations ACL resource.
-     * 
+     *
      * @return string
      */
     public function getResourceId()

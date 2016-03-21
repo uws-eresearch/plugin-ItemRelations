@@ -3,7 +3,12 @@
  * Item Relations
  * @copyright Copyright 2010-2014 Roy Rosenzweig Center for History and New Media
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU GPLv3
+ * Extended by eResearch at University of Technology, Sydney
  */
+
+
+require_once('controllers/ItemAutocompleteController.php');
+
 
 /**
  * Item Relations plugin.
@@ -36,75 +41,97 @@ class ItemRelationsPlugin extends Omeka_Plugin_AbstractPlugin
     protected $_filters = array(
         'admin_items_form_tabs',
         'admin_navigation_main',
-	'api_resources',
-    );
-public function filterApiResources($apiResources)
-{
-    // For the resource URI: /api/your_resources/[:id]
-    $apiResources['item_relations'] = array(
-        // Module associated with your resource.
-	//'module' => 'ItemRelationsPlugin',
-        // Controller associated with your resource.
-        // Type of record associated with your resource.
-        'record_type' => 'ItemRelationsRelation',
-        // List of actions available for your resource.
-        'actions' => array(
-            'index',  // GET request without ID
-            'get',    // GET request with ID
-            'post',   // POST request
-            'put',    // PUT request (ID is required)
-            'delete', // DELETE request (ID is required)
-        ),
-        // List of GET parameters available for your index action.
-        'index_params' => array('subject_item_id', 'object_item_id', 'property_id'),
-    );
-    //Added GET only for looking up properties, TODO Post and Put
-    $apiResources['item_relations_vocabularies'] = array(
-        // Module associated with your resource.
-        //'module' => 'ItemRelationsPlugin',
-        // Controller associated with your resource.
-        // Type of record associated with your resource.
-        'record_type' => 'ItemRelationsVocabulary',
-        // List of actions available for your resource.
-        'actions' => array(
-            'index',  // GET request without ID 
-            'get',    // GET request with ID
-            //'post',   // POST request
-            //'put',    // PUT request (ID is required)
-            //'delete', // DELETE request (ID is required)
-        ), 
-        // List of GET parameters available for your index action.
-        'index_params' => array('label', 'id', 'name', 'namespace_uri', 'namespace_prefix'),
+        'api_resources',
     );
 
-    //Added GET only for looking up properties, TODO Post and Put
-    $apiResources['item_relations_properties'] = array(
-        // Module associated with your resource.
-        //'module' => 'ItemRelationsPlugin',
-        // Controller associated with your resource.
-        // Type of record associated with your resource.
-        'record_type' => 'ItemRelationsProperty',
-        // List of actions available for your resource.
-        'actions' => array(
-            'index',  // GET request without ID
-            'get',    // GET request with ID
-            //'post',   // POST request
-            //'put',    // PUT request (ID is required)
-            //'delete', // DELETE request (ID is required)
-        ),
-        // List of GET parameters available for your index action.
-        'index_params' => array('label', 'id', 'vocabulary_id'),
-    );
+    public function filterApiResources($apiResources)
+    {
+        // For the resource URI: /api/your_resources/[:id]
+        $apiResources['item_relations'] = array(
+            // Module associated with your resource.
+            //'module' => 'ItemRelationsPlugin',
+            // Controller associated with your resource.
+            // Type of record associated with your resource.
+            'record_type' => 'ItemRelationsRelation',
+            // List of actions available for your resource.
+            'actions' => array(
+                'index',  // GET request without ID
+                'get',    // GET request with ID
+                'post',   // POST request
+                'put',    // PUT request (ID is required)
+                'delete', // DELETE request (ID is required)
+            ),
+            // List of GET parameters available for your index action.
+            'index_params' => array('subject_item_id', 'object_item_id', 'property_id'),
+        );
+        //Added GET only for looking up properties, TODO Post and Put
+        $apiResources['item_relations_vocabularies'] = array(
+            // Module associated with your resource.
+            //'module' => 'ItemRelationsPlugin',
+            // Controller associated with your resource.
+            // Type of record associated with your resource.
+            'record_type' => 'ItemRelationsVocabulary',
+            // List of actions available for your resource.
+            'actions' => array(
+                'index',  // GET request without ID
+                'get',    // GET request with ID
+                'post',   // POST request
+                'put',    // PUT request (ID is required)
+                'delete', // DELETE request (ID is required)
+            ),
+            // List of GET parameters available for your index action.
+            'index_params' => array('label', 'id', 'name', 'namespace_uri', 'namespace_prefix'),
+        );
 
+        //Added GET only for looking up properties, TODO Post and Put
+        $apiResources['item_relations_properties'] = array(
+            // Module associated with your resource.
+            //'module' => 'ItemRelationsPlugin',
+            // Controller associated with your resource.
+            // Type of record associated with your resource.
+            'record_type' => 'ItemRelationsProperty',
+            // List of actions available for your resource.
+            'actions' => array(
+                'index',  // GET request without ID
+                'get',    // GET request with ID
+                'post',   // POST request
+                'put',    // PUT request (ID is required)
+                'delete', // DELETE request (ID is required)
+            ),
+            // List of GET parameters available for your index action.
+            'index_params' => array('label', 'id', 'vocabulary_id', 'local_part'),
+        );
+    /*
+        //Added GET only
+        $apiResources['autocomplete_item'] = array(
+            // Module associated with your resource.
+            // 'module' => 'ItemRelationsPlugin',
+            'module' => 'item-relations',
+            // Controller associated with your resource.
+            'controller' => 'item-autocomplete',
+            // Type of record associated with your resource.
+            // 'record_type' => 'Item',
+            // List of actions available for your resource.
+            'actions' => array(
+                // 'index',  // GET request without ID
+                'get',    // GET request with search term
+                //'post',   // POST request
+                //'put',    // PUT request (ID is required)
+                //'delete', // DELETE request (ID is required)
+            ),
+            // List of GET parameters available for your index action.
+            // 'index_params' => array('label', 'id', 'vocabulary_id'),
+        );
+    */
+        return $apiResources;
+    }
 
-    return $apiResources;
-}
     /**
      * @var array Options and their default values.
      */
     protected $_options = array(
         'item_relations_public_append_to_items_show' => 1,
-        'item_relations_relation_format' => 'prefix_local_part'
+        'item_relations_relation_format' => 'friendly_part'
     );
 
     /**
@@ -132,6 +159,7 @@ public function filterApiResources($apiResources)
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
             `vocabulary_id` int(10) unsigned NOT NULL,
             `local_part` varchar(100) NOT NULL,
+            `friendly_part` varchar(100) DEFAULT NULL,
             `label` varchar(100) DEFAULT NULL,
             `description` text,
             PRIMARY KEY (`id`)
@@ -165,6 +193,7 @@ public function filterApiResources($apiResources)
                 $property = new ItemRelationsProperty;
                 $property->vocabulary_id = $vocabularyId;
                 $property->local_part = $formalProperty['local_part'];
+                $property->friendly_part = $formalProperty['friendly_part'];
                 $property->label = $formalProperty['label'];
                 $property->description = $formalProperty['description'];
                 $property->save();
@@ -287,7 +316,28 @@ public function filterApiResources($apiResources)
     public function hookInitialize()
     {
         add_translation_source(dirname(__FILE__) . '/languages');
+
+        $db = get_db();
+        $adapter = $db->getAdapter();
+
+//        if (floatval($oldVersion) <= '2.1')
+        {
+            $sql = "SHOW COLUMNS FROM `{$db->ItemRelationsProperty}` LIKE 'friendly_part'";
+            $statement = $adapter->query($sql);
+
+            // do we already have a column in the db for friendly_part?
+            if (! $adapter->query($sql)->fetch())
+            {
+                // Nein!  add friendly parts to the db.
+                $this->populateFriendlyParts();
+            } /*
+            else
+            {
+                //  Jawohl!  do nothing.
+            } */
+        }
     }
+
 
     /**
      * Define the ACL.
@@ -302,8 +352,8 @@ public function filterApiResources($apiResources)
         $vocabResource = new Zend_Acl_Resource('ItemRelations_Vocabularies');
         $acl->add($indexResource);
         $acl->add($vocabResource);
-	$acl->addResource('Relations');
-	$acl->allow(null, 'Relations');
+        $acl->addResource('Relations');
+        $acl->allow(null, 'Relations');
     }
 
     /**
@@ -314,8 +364,8 @@ public function filterApiResources($apiResources)
             $item = get_current_record('item');
 
             echo common('item-relations-show', array(
-                'subjectRelations' => self::prepareSubjectRelations($item),
-                'objectRelations' => self::prepareObjectRelations($item)
+                'subjectRelations' => self::prepareSubjectRelationsTree($item),
+                'objectRelations' => self::prepareObjectRelationsTree($item)
             ));
         }
     }
@@ -344,7 +394,7 @@ public function filterApiResources($apiResources)
             'formSelectProperties' => get_table_options('ItemRelationsProperty'))
         );
     }
-    
+
     /**
      * Save the item relations after saving an item add/edit form.
      *
@@ -532,6 +582,33 @@ public function filterApiResources($apiResources)
         return $subjectRelations;
     }
 
+    public static function prepareSubjectRelationsTree(Item $item)
+    {
+        $subjects = get_db()->getTable('ItemRelationsRelation')->findBySubjectItemId($item->id);
+        $subjectRelationsTree = array();
+        
+        foreach ($subjects as $subject)
+        {
+            if (!($item = get_record_by_id('item', $subject->object_item_id))) {
+                continue;
+            }
+            
+            if (empty($subjectRelationsTree[$subject->getPropertyText()]))
+            {
+                $subjectRelationsTree[$subject->getPropertyText()] = array();
+            }
+            $subjectRelationsTree[$subject->getPropertyText()][] = array(
+                'item_relation_id' => $subject->id,
+                'object_item_id' => $subject->object_item_id,
+                'object_item_title' => self::getItemTitle($item),
+                'relation_text' => $subject->getPropertyText(),
+                'relation_description' => $subject->property_description
+            );
+        }
+        
+        return $subjectRelationsTree;
+    }
+    
     /**
      * Prepare object item relations for display.
      *
@@ -555,6 +632,33 @@ public function filterApiResources($apiResources)
             );
         }
         return $objectRelations;
+    }
+    
+    public static function prepareObjectRelationsTree(Item $item)
+    {
+        $objects = get_db()->getTable('ItemRelationsRelation')->findByObjectItemId($item->id);
+        $objectRelationsTree = array();
+
+        foreach ($objects as $object)
+        {
+            if (!($item = get_record_by_id('item', $object->subject_item_id))) {
+                continue;
+            }
+            
+            if (empty($objectRelationsTree[$object->getPropertyText()]))
+            {
+                $objectRelationsTree[$object->getPropertyText()] = array();
+            }
+
+            $objectRelationsTree[$object->getPropertyText()][] = array(
+                'item_relation_id' => $object->id,
+                'subject_item_id' => $object->subject_item_id,
+                'subject_item_title' => self::getItemTitle($item),
+                'relation_text' => $object->getPropertyText(),
+                'relation_description' => $object->property_description
+            );
+        }
+        return $objectRelationsTree;
     }
 
     /**
@@ -610,4 +714,76 @@ public function filterApiResources($apiResources)
 
         return true;
     }
+
+    public function populateFriendlyParts()
+    {
+        $db = get_db();
+        $adapter = $db->getAdapter();
+
+        $sql = "ALTER TABLE `{$db->ItemRelationsProperty}` ADD friendly_part VARCHAR(100) AFTER local_part";
+
+        $adapter->query($sql);
+
+        //  build a list of vocabs we have in the db
+        $vocabsResult = $db->getTable('ItemRelationsVocabulary')->findAll();
+        $dbVocabs = array();   // put the vocabs from the db into a handily-keyed format
+        foreach($vocabsResult as $row)
+        {
+            $dbVocabs[$row->namespace_prefix] = $row;
+        }
+
+        //  get vocabs we have template for in PHP include
+        $templateFormalVocabularies = include 'formal_vocabularies.php';
+
+        $templateVocabularyNamespacesPresent = array();  // hold a list of templated vocabs
+        foreach ($templateFormalVocabularies as $templateFormalVocabulary)
+        {
+            $templateVocabularyNamespacesPresent[] = $templateFormalVocabulary['namespace_prefix'];
+
+            //  create vocab in db if not present
+            if (! in_array($templateFormalVocabulary['namespace_prefix'], array_keys($dbVocabs)))
+            {
+                $vocabulary = new ItemRelationsVocabulary;
+                $vocabulary->name = $templateFormalVocabulary['name'];
+                $vocabulary->description = $templateFormalVocabulary['description'];
+                $vocabulary->namespace_prefix = $templateFormalVocabulary['namespace_prefix'];
+                $vocabulary->namespace_uri = $templateFormalVocabulary['namespace_uri'];
+                $vocabulary->custom = 0;
+                $vocabulary->save();
+
+                $vocabularyId = $vocabulary->id;
+            }
+        }
+
+        //  should have all template vocabs in the db now, fetch them again
+        $vocabsResult = $db->getTable('ItemRelationsVocabulary')->findAll();
+        foreach($templateFormalVocabularies as $templateVocab)
+        {
+            // does this db vocab exist in the template?  if not, skip it
+            if (empty($dbVocabs[$templateVocab['namespace_prefix']]))
+            {
+                continue;
+            }
+
+            // get this db vocab's properties from the db
+            $propertiesResult = $db->getTable('ItemRelationsProperty')->findByVocabularyId($dbVocabs[$templateVocab['namespace_prefix']]['id']);
+            // put them into a handily-keyed array so we can compare them with the template ones
+            $dbVocabProperties = array();
+            foreach ($propertiesResult as $row)
+            {
+                $dbVocabProperties[$row['local_part']] = $row;
+            }
+
+            foreach ($templateVocab['properties'] as $templateVocabProperty)
+            {
+                if ($dbVocabProperties[$templateVocabProperty['local_part']]->friendly_part != $templateVocabProperty['friendly_part'])
+                {
+                    $property = $dbVocabProperties[$templateVocabProperty['local_part']];
+                    $property->friendly_part = $templateVocabProperty['friendly_part'];
+                    $property->save();
+                }
+            }
+        }
+    }
+
 }
